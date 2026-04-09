@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Show do Service Desk</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d1b2a;
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #ffd60a;
+    }
+
+    .question {
+      font-size: 20px;
+      margin: 20px 0;
+    }
+
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #1b263b;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .answers button:hover {
+      background: #415a77;
+    }
+
+    .correct {
+      background: #2ecc71 !important;
+    }
+
+    .wrong {
+      background: #e63946 !important;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      background: #ffd60a;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎮 Show do Service Desk</h1>
+  <div id="level"></div>
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+
+  <div class="controls">
+    <button class="btn" onclick="nextQuestion()">Próxima</button>
+  </div>
+
+  <div class="score" id="score"></div>
+</div>
+
+<script>
+const questions = [
+  {
+    level: "🟢 Fácil",
+    q: "O que melhor define um incidente no ITIL?",
+    a: [
+      "Qualquer falha em um componente de TI",
+      "Interrupção ou degradação não planejada de um serviço",
+      "Evento que pode gerar impacto futuro",
+      "Solicitação de usuário não atendida"
+    ],
+    correct: 1
+  },
+  {
+    level: "🟢 Fácil",
+    q: "Qual é o papel MAIS correto do Service Desk?",
+    a: [
+      "Resolver todos os incidentes sem escalar",
+      "Registrar e encaminhar chamados",
+      "Restaurar o serviço o mais rápido possível sendo ponto único de contato",
+      "Monitorar infraestrutura"
+    ],
+    correct: 2
+  },
+  {
+    level: "🟡 Médio",
+    q: "Qual cenário representa melhor um problema?",
+    a: [
+      "Usuário sem acesso",
+      "Servidor fora do ar",
+      "Incidentes recorrentes sem causa identificada",
+      "Solicitação de acesso"
+    ],
+    correct: 2
+  },
+  {
+    level: "🟡 Médio",
+    q: "O que é um workaround?",
+    a: [
+      "Solução definitiva",
+      "Correção do sistema",
+      "Solução temporária sem causa raiz",
+      "Mudança aprovada"
+    ],
+    correct: 2
+  },
+  {
+    level: "🔴 Difícil",
+    q: "Como é definida a prioridade?",
+    a: [
+      "Tempo + criticidade",
+      "Impacto + urgência",
+      "Sistema + usuário",
+      "SLA + categoria"
+    ],
+    correct: 1
+  },
+  {
+    level: "🔴 Difícil",
+    q: "Melhor ação para incidente recorrente?",
+    a: [
+      "Continuar resolvendo",
+      "Ignorar",
+      "Abrir problema e buscar causa raiz",
+      "Aumentar SLA"
+    ],
+    correct: 2
+  }
+];
+
+let current = 0;
+let score = 0;
+
+function loadQuestion() {
+  const q = questions[current];
+  document.getElementById("level").innerText = q.level;
+  document.getElementById("question").innerText = q.q;
+
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  q.a.forEach((answer, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = answer;
+    btn.onclick = () => checkAnswer(btn, index);
+    answersDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(button, index) {
+  const correct = questions[current].correct;
+  const buttons = document.querySelectorAll(".answers button");
+
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (index === correct) {
+    button.classList.add("correct");
+    score++;
+  } else {
+    button.classList.add("wrong");
+    buttons[correct].classList.add("correct");
+  }
+
+  document.getElementById("score").innerText = "Pontuação: " + score;
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    document.getElementById("question").innerText = "Fim do jogo!";
+    document.getElementById("answers").innerHTML = "";
+    return;
+  }
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
