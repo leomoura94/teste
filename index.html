@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Show do Service Desk PRO</title>
+<title>Show do Service Desk</title>
 
 <style>
 body {
@@ -40,8 +40,8 @@ h1 { color: #ffd60a; }
 .wrong { background: #e63946 !important; }
 
 .btn {
-  margin: 5px;
-  padding: 10px;
+  margin-top: 15px;
+  padding: 10px 20px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -49,12 +49,14 @@ h1 { color: #ffd60a; }
   font-weight: bold;
 }
 
-.timer { font-size: 18px; margin: 10px; }
-.prize { font-size: 18px; color: #90ee90; }
+.timer {
+  font-size: 18px;
+  margin: 10px;
+}
 
-.ranking {
-  margin-top: 20px;
-  text-align: left;
+.score {
+  font-size: 18px;
+  margin-top: 10px;
 }
 </style>
 
@@ -62,176 +64,70 @@ h1 { color: #ffd60a; }
 <body>
 
 <div class="container">
-  <h1>🎮 Show do Service Desk PRO</h1>
-
-  <input id="playerName" placeholder="Seu nome" />
-
-  <div class="timer">⏱️ Tempo: <span id="time">30</span>s</div>
-  <div class="prize">💰 Prêmio: <span id="prize">0</span></div>
+  <h1>🎮 Show do Service Desk</h1>
 
   <div id="level"></div>
+  <div class="timer">⏱️ Tempo: <span id="time">30</span>s</div>
+
   <div class="question" id="question"></div>
   <div class="answers" id="answers"></div>
 
-  <button class="btn" onclick="useHelp()">🆘 Eliminar 2</button>
   <button class="btn" onclick="nextQuestion()">➡️ Próxima</button>
 
-  <div id="result"></div>
-
-  <div class="ranking">
-    <h3>🏆 Ranking</h3>
-    <ul id="ranking"></ul>
-  </div>
+  <div class="score">Pontuação: <span id="score">0</span></div>
 </div>
 
 <script>
 const questions = [
-  // 🟢 FÁCIL
-  {
-    level: "🟢 Fácil",
-    q: "O que melhor define um incidente?",
-    a: [
-      "Qualquer falha em TI",
-      "Interrupção ou degradação não planejada de serviço",
-      "Evento futuro",
-      "Solicitação"
-    ],
-    correct: 1,
-    prize: 1000
-  },
-  {
-    level: "🟢 Fácil",
-    q: "Qual é o papel MAIS correto do Service Desk?",
-    a: [
-      "Resolver tudo",
-      "Registrar e encaminhar",
-      "Restaurar serviço sendo ponto único",
-      "Monitorar"
-    ],
-    correct: 2,
-    prize: 2000
-  },
-  {
-    level: "🟢 Fácil",
-    q: "Sobre SLA, qual afirmação está correta?",
-    a: [
-      "Só tempo de resposta",
-      "Tempo baseado em impacto e urgência",
-      "Igual para todos",
-      "Só críticos"
-    ],
-    correct: 1,
-    prize: 3000
-  },
-  {
-    level: "🟢 Fácil",
-    q: "Antes de escalar, o N1 deve:",
-    a: [
-      "Escalar direto",
-      "Testar aleatório",
-      "Seguir KB + coletar evidências",
-      "Ignorar"
-    ],
-    correct: 2,
-    prize: 5000
-  },
+  { level:"🟢 Fácil", q:"O que melhor define um incidente?",
+    a:["Qualquer falha em TI","Interrupção ou degradação não planejada de serviço","Evento futuro","Solicitação"],
+    correct:1 },
 
-  // 🟡 MÉDIO
-  {
-    level: "🟡 Médio",
-    q: "O que representa melhor um problema?",
-    a: [
-      "Erro isolado",
-      "Servidor fora",
-      "Incidentes recorrentes sem causa",
-      "Solicitação"
-    ],
-    correct: 2,
-    prize: 10000
-  },
-  {
-    level: "🟡 Médio",
-    q: "Workaround é:",
-    a: [
-      "Solução definitiva",
-      "Correção permanente",
-      "Solução temporária sem causa raiz",
-      "Mudança"
-    ],
-    correct: 2,
-    prize: 20000
-  },
-  {
-    level: "🟡 Médio",
-    q: "Ticket bem preparado contém:",
-    a: [
-      "Texto longo",
-      "Print apenas",
-      "Contexto + evidência + testes",
-      "Prioridade alta"
-    ],
-    correct: 2,
-    prize: 30000
-  },
+  { level:"🟢 Fácil", q:"Qual é o papel MAIS correto do Service Desk?",
+    a:["Resolver tudo","Registrar e encaminhar","Restaurar serviço sendo ponto único","Monitorar"],
+    correct:2 },
 
-  // 🔴 DIFÍCIL
-  {
-    level: "🔴 Difícil",
-    q: "Prioridade é definida por:",
-    a: [
-      "Tempo",
-      "Impacto + urgência",
-      "Sistema",
-      "Usuário"
-    ],
-    correct: 1,
-    prize: 40000
-  },
-  {
-    level: "🔴 Difícil",
-    q: "Incidente vira problema quando:",
-    a: [
-      "Demora",
-      "Usuário reclama",
-      "É recorrente ou causa desconhecida",
-      "É crítico"
-    ],
-    correct: 2,
-    prize: 60000
-  },
-  {
-    level: "🔴 Difícil",
-    q: "Melhor ação para recorrência:",
-    a: [
-      "Resolver sempre",
-      "Ignorar",
-      "Abrir problema e buscar causa raiz",
-      "Escalar"
-    ],
-    correct: 2,
-    prize: 80000
-  },
+  { level:"🟢 Fácil", q:"Sobre SLA, qual afirmação está correta?",
+    a:["Só tempo de resposta","Tempo baseado em impacto e urgência","Igual para todos","Só críticos"],
+    correct:1 },
 
-  // 🏁 ESPECIALISTA
-  {
-    level: "🏁 Especialista",
-    q: "Falha no Incident Management:",
-    a: [
-      "Dentro do SLA",
-      "Escalonado correto",
-      "Reabertura por falta de validação",
-      "Reclassificação"
-    ],
-    correct: 2,
-    prize: 100000
-  }
+  { level:"🟢 Fácil", q:"Antes de escalar, o N1 deve:",
+    a:["Escalar direto","Testar aleatório","Seguir KB + coletar evidências","Ignorar"],
+    correct:2 },
+
+  { level:"🟡 Médio", q:"O que representa melhor um problema?",
+    a:["Erro isolado","Servidor fora","Incidentes recorrentes sem causa","Solicitação"],
+    correct:2 },
+
+  { level:"🟡 Médio", q:"Workaround é:",
+    a:["Solução definitiva","Correção permanente","Solução temporária sem causa raiz","Mudança"],
+    correct:2 },
+
+  { level:"🟡 Médio", q:"Ticket bem preparado contém:",
+    a:["Texto longo","Print apenas","Contexto + evidência + testes","Prioridade alta"],
+    correct:2 },
+
+  { level:"🔴 Difícil", q:"Prioridade é definida por:",
+    a:["Tempo","Impacto + urgência","Sistema","Usuário"],
+    correct:1 },
+
+  { level:"🔴 Difícil", q:"Incidente vira problema quando:",
+    a:["Demora","Usuário reclama","É recorrente ou causa desconhecida","É crítico"],
+    correct:2 },
+
+  { level:"🔴 Difícil", q:"Melhor ação para recorrência:",
+    a:["Resolver sempre","Ignorar","Abrir problema e buscar causa raiz","Escalar"],
+    correct:2 },
+
+  { level:"🏁 Especialista", q:"Falha no Incident Management:",
+    a:["Dentro do SLA","Escalonado correto","Reabertura por falta de validação","Reclassificação"],
+    correct:2 }
 ];
 
 let current = 0;
 let score = 0;
 let timer;
 let timeLeft = 30;
-let helpUsed = false;
 
 function loadQuestion() {
   resetTimer();
@@ -239,7 +135,6 @@ function loadQuestion() {
   const q = questions[current];
   document.getElementById("level").innerText = q.level;
   document.getElementById("question").innerText = q.q;
-  document.getElementById("prize").innerText = q.prize;
 
   const answersDiv = document.getElementById("answers");
   answersDiv.innerHTML = "";
@@ -262,37 +157,24 @@ function checkAnswer(btn, index) {
 
   if (index === correct) {
     btn.classList.add("correct");
-    score = questions[current].prize;
+    score++;
   } else {
     btn.classList.add("wrong");
     buttons[correct].classList.add("correct");
+    score--;
   }
+
+  document.getElementById("score").innerText = score;
 }
 
 function nextQuestion() {
   current++;
   if (current >= questions.length) {
-    endGame();
+    document.getElementById("question").innerText = "Fim do jogo!";
+    document.getElementById("answers").innerHTML = "";
     return;
   }
   loadQuestion();
-}
-
-function useHelp() {
-  if (helpUsed) return;
-  helpUsed = true;
-
-  const correct = questions[current].correct;
-  const buttons = document.querySelectorAll(".answers button");
-
-  let removed = 0;
-
-  buttons.forEach((btn, i) => {
-    if (i !== correct && removed < 2) {
-      btn.style.display = "none";
-      removed++;
-    }
-  });
 }
 
 function resetTimer() {
@@ -311,41 +193,6 @@ function resetTimer() {
   }, 1000);
 }
 
-function endGame() {
-  document.getElementById("question").innerText = "Fim do jogo!";
-  document.getElementById("answers").innerHTML = "";
-  document.getElementById("result").innerText = "Pontuação final: " + score;
-
-  saveRanking();
-  loadRanking();
-}
-
-function saveRanking() {
-  const name = document.getElementById("playerName").value || "Anon";
-
-  let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
-
-  ranking.push({ name, score });
-
-  ranking.sort((a, b) => b.score - a.score);
-  ranking = ranking.slice(0, 5);
-
-  localStorage.setItem("ranking", JSON.stringify(ranking));
-}
-
-function loadRanking() {
-  const ranking = JSON.parse(localStorage.getItem("ranking")) || [];
-  const ul = document.getElementById("ranking");
-  ul.innerHTML = "";
-
-  ranking.forEach(r => {
-    const li = document.createElement("li");
-    li.innerText = `${r.name} - ${r.score}`;
-    ul.appendChild(li);
-  });
-}
-
-loadRanking();
 loadQuestion();
 </script>
 
