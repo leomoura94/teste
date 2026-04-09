@@ -1,208 +1,265 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Show do Service Desk</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0d1b2a;
-      color: #fff;
-      text-align: center;
-      padding: 30px;
-    }
+<meta charset="UTF-8">
+<title>Show do Service Desk PRO</title>
 
-    .container {
-      max-width: 700px;
-      margin: auto;
-    }
+<style>
+body {
+  font-family: Arial;
+  background: #0d1b2a;
+  color: white;
+  text-align: center;
+}
 
-    h1 {
-      color: #ffd60a;
-    }
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+}
 
-    .question {
-      font-size: 20px;
-      margin: 20px 0;
-    }
+h1 { color: #ffd60a; }
 
-    .answers button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #1b263b;
-      color: white;
-      transition: 0.3s;
-    }
+.question { font-size: 20px; margin: 20px 0; }
 
-    .answers button:hover {
-      background: #415a77;
-    }
+.answers button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #1b263b;
+  color: white;
+  cursor: pointer;
+}
 
-    .correct {
-      background: #2ecc71 !important;
-    }
+.answers button:hover { background: #415a77; }
 
-    .wrong {
-      background: #e63946 !important;
-    }
+.correct { background: #2ecc71 !important; }
+.wrong { background: #e63946 !important; }
 
-    .controls {
-      margin-top: 20px;
-    }
+.btn {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #ffd60a;
+  font-weight: bold;
+}
 
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin: 5px;
-      background: #ffd60a;
-      color: #000;
-      font-weight: bold;
-    }
+.timer { font-size: 18px; margin: 10px; }
+.prize { font-size: 18px; color: #90ee90; }
 
-    .score {
-      margin-top: 20px;
-      font-size: 18px;
-    }
-  </style>
+.ranking {
+  margin-top: 20px;
+  text-align: left;
+}
+</style>
+
 </head>
 <body>
 
 <div class="container">
-  <h1>🎮 Show do Service Desk</h1>
-  <div id="level"></div>
+  <h1>🎮 Show do Service Desk PRO</h1>
+
+  <input id="playerName" placeholder="Seu nome" />
+
+  <div class="timer">⏱️ Tempo: <span id="time">30</span>s</div>
+  <div class="prize">💰 Prêmio: <span id="prize">0</span></div>
+
   <div class="question" id="question"></div>
   <div class="answers" id="answers"></div>
 
-  <div class="controls">
-    <button class="btn" onclick="nextQuestion()">Próxima</button>
-  </div>
+  <button class="btn" onclick="useHelp()">🆘 Eliminar 2</button>
+  <button class="btn" onclick="nextQuestion()">➡️ Próxima</button>
 
-  <div class="score" id="score"></div>
+  <div id="result"></div>
+
+  <div class="ranking">
+    <h3>🏆 Ranking</h3>
+    <ul id="ranking"></ul>
+  </div>
 </div>
 
 <script>
 const questions = [
   {
-    level: "🟢 Fácil",
-    q: "O que melhor define um incidente no ITIL?",
+    q: "O que define um incidente?",
     a: [
-      "Qualquer falha em um componente de TI",
-      "Interrupção ou degradação não planejada de um serviço",
-      "Evento que pode gerar impacto futuro",
-      "Solicitação de usuário não atendida"
+      "Falha técnica",
+      "Interrupção ou degradação de serviço",
+      "Evento futuro",
+      "Solicitação"
     ],
-    correct: 1
+    correct: 1,
+    prize: 1000
   },
   {
-    level: "🟢 Fácil",
-    q: "Qual é o papel MAIS correto do Service Desk?",
+    q: "Papel do Service Desk?",
     a: [
-      "Resolver todos os incidentes sem escalar",
-      "Registrar e encaminhar chamados",
-      "Restaurar o serviço o mais rápido possível sendo ponto único de contato",
-      "Monitorar infraestrutura"
+      "Resolver tudo",
+      "Encaminhar",
+      "Restaurar serviço sendo ponto único",
+      "Monitorar"
     ],
-    correct: 2
+    correct: 2,
+    prize: 2000
   },
   {
-    level: "🟡 Médio",
-    q: "Qual cenário representa melhor um problema?",
+    q: "O que é problema?",
     a: [
-      "Usuário sem acesso",
-      "Servidor fora do ar",
-      "Incidentes recorrentes sem causa identificada",
-      "Solicitação de acesso"
+      "Erro isolado",
+      "Falha crítica",
+      "Causa raiz de incidentes",
+      "Mudança"
     ],
-    correct: 2
+    correct: 2,
+    prize: 5000
   },
   {
-    level: "🟡 Médio",
-    q: "O que é um workaround?",
+    q: "Prioridade é definida por?",
     a: [
-      "Solução definitiva",
-      "Correção do sistema",
-      "Solução temporária sem causa raiz",
-      "Mudança aprovada"
-    ],
-    correct: 2
-  },
-  {
-    level: "🔴 Difícil",
-    q: "Como é definida a prioridade?",
-    a: [
-      "Tempo + criticidade",
+      "Tempo",
       "Impacto + urgência",
-      "Sistema + usuário",
-      "SLA + categoria"
+      "Usuário",
+      "Sistema"
     ],
-    correct: 1
+    correct: 1,
+    prize: 10000
   },
   {
-    level: "🔴 Difícil",
-    q: "Melhor ação para incidente recorrente?",
+    q: "Melhor ação para recorrência?",
     a: [
-      "Continuar resolvendo",
       "Ignorar",
-      "Abrir problema e buscar causa raiz",
-      "Aumentar SLA"
+      "Resolver sempre",
+      "Abrir problema",
+      "Escalar"
     ],
-    correct: 2
+    correct: 2,
+    prize: 20000
   }
 ];
 
 let current = 0;
 let score = 0;
+let timer;
+let timeLeft = 30;
+let helpUsed = false;
 
 function loadQuestion() {
+  resetTimer();
+
   const q = questions[current];
-  document.getElementById("level").innerText = q.level;
   document.getElementById("question").innerText = q.q;
+  document.getElementById("prize").innerText = q.prize;
 
   const answersDiv = document.getElementById("answers");
   answersDiv.innerHTML = "";
 
-  q.a.forEach((answer, index) => {
+  q.a.forEach((ans, i) => {
     const btn = document.createElement("button");
-    btn.innerText = answer;
-    btn.onclick = () => checkAnswer(btn, index);
+    btn.innerText = ans;
+    btn.onclick = () => checkAnswer(btn, i);
     answersDiv.appendChild(btn);
   });
 }
 
-function checkAnswer(button, index) {
+function checkAnswer(btn, index) {
+  clearInterval(timer);
+
   const correct = questions[current].correct;
   const buttons = document.querySelectorAll(".answers button");
 
-  buttons.forEach(btn => btn.disabled = true);
+  buttons.forEach(b => b.disabled = true);
 
   if (index === correct) {
-    button.classList.add("correct");
-    score++;
+    btn.classList.add("correct");
+    score = questions[current].prize;
   } else {
-    button.classList.add("wrong");
+    btn.classList.add("wrong");
     buttons[correct].classList.add("correct");
   }
-
-  document.getElementById("score").innerText = "Pontuação: " + score;
 }
 
 function nextQuestion() {
   current++;
   if (current >= questions.length) {
-    document.getElementById("question").innerText = "Fim do jogo!";
-    document.getElementById("answers").innerHTML = "";
+    endGame();
     return;
   }
   loadQuestion();
 }
 
+function useHelp() {
+  if (helpUsed) return;
+  helpUsed = true;
+
+  const correct = questions[current].correct;
+  const buttons = document.querySelectorAll(".answers button");
+
+  let removed = 0;
+
+  buttons.forEach((btn, i) => {
+    if (i !== correct && removed < 2) {
+      btn.style.display = "none";
+      removed++;
+    }
+  });
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  timeLeft = 30;
+  document.getElementById("time").innerText = timeLeft;
+
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById("time").innerText = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      nextQuestion();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  document.getElementById("question").innerText = "Fim do jogo!";
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("result").innerText = "Pontuação final: " + score;
+
+  saveRanking();
+  loadRanking();
+}
+
+function saveRanking() {
+  const name = document.getElementById("playerName").value || "Anon";
+
+  let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+
+  ranking.push({ name, score });
+
+  ranking.sort((a, b) => b.score - a.score);
+  ranking = ranking.slice(0, 5);
+
+  localStorage.setItem("ranking", JSON.stringify(ranking));
+}
+
+function loadRanking() {
+  const ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+  const ul = document.getElementById("ranking");
+  ul.innerHTML = "";
+
+  ranking.forEach(r => {
+    const li = document.createElement("li");
+    li.innerText = `${r.name} - ${r.score}`;
+    ul.appendChild(li);
+  });
+}
+
+loadRanking();
 loadQuestion();
 </script>
 
