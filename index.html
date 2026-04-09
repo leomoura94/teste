@@ -69,6 +69,7 @@ h1 { color: #ffd60a; }
   <div class="timer">⏱️ Tempo: <span id="time">30</span>s</div>
   <div class="prize">💰 Prêmio: <span id="prize">0</span></div>
 
+  <div id="level"></div>
   <div class="question" id="question"></div>
   <div class="answers" id="answers"></div>
 
@@ -85,11 +86,13 @@ h1 { color: #ffd60a; }
 
 <script>
 const questions = [
+  // 🟢 FÁCIL
   {
-    q: "O que define um incidente?",
+    level: "🟢 Fácil",
+    q: "O que melhor define um incidente?",
     a: [
-      "Falha técnica",
-      "Interrupção ou degradação de serviço",
+      "Qualquer falha em TI",
+      "Interrupção ou degradação não planejada de serviço",
       "Evento futuro",
       "Solicitação"
     ],
@@ -97,10 +100,11 @@ const questions = [
     prize: 1000
   },
   {
-    q: "Papel do Service Desk?",
+    level: "🟢 Fácil",
+    q: "Qual é o papel MAIS correto do Service Desk?",
     a: [
       "Resolver tudo",
-      "Encaminhar",
+      "Registrar e encaminhar",
       "Restaurar serviço sendo ponto único",
       "Monitorar"
     ],
@@ -108,37 +112,118 @@ const questions = [
     prize: 2000
   },
   {
-    q: "O que é problema?",
+    level: "🟢 Fácil",
+    q: "Sobre SLA, qual afirmação está correta?",
     a: [
-      "Erro isolado",
-      "Falha crítica",
-      "Causa raiz de incidentes",
-      "Mudança"
+      "Só tempo de resposta",
+      "Tempo baseado em impacto e urgência",
+      "Igual para todos",
+      "Só críticos"
+    ],
+    correct: 1,
+    prize: 3000
+  },
+  {
+    level: "🟢 Fácil",
+    q: "Antes de escalar, o N1 deve:",
+    a: [
+      "Escalar direto",
+      "Testar aleatório",
+      "Seguir KB + coletar evidências",
+      "Ignorar"
     ],
     correct: 2,
     prize: 5000
   },
+
+  // 🟡 MÉDIO
   {
-    q: "Prioridade é definida por?",
+    level: "🟡 Médio",
+    q: "O que representa melhor um problema?",
     a: [
-      "Tempo",
-      "Impacto + urgência",
-      "Usuário",
-      "Sistema"
+      "Erro isolado",
+      "Servidor fora",
+      "Incidentes recorrentes sem causa",
+      "Solicitação"
     ],
-    correct: 1,
+    correct: 2,
     prize: 10000
   },
   {
-    q: "Melhor ação para recorrência?",
+    level: "🟡 Médio",
+    q: "Workaround é:",
     a: [
-      "Ignorar",
-      "Resolver sempre",
-      "Abrir problema",
-      "Escalar"
+      "Solução definitiva",
+      "Correção permanente",
+      "Solução temporária sem causa raiz",
+      "Mudança"
     ],
     correct: 2,
     prize: 20000
+  },
+  {
+    level: "🟡 Médio",
+    q: "Ticket bem preparado contém:",
+    a: [
+      "Texto longo",
+      "Print apenas",
+      "Contexto + evidência + testes",
+      "Prioridade alta"
+    ],
+    correct: 2,
+    prize: 30000
+  },
+
+  // 🔴 DIFÍCIL
+  {
+    level: "🔴 Difícil",
+    q: "Prioridade é definida por:",
+    a: [
+      "Tempo",
+      "Impacto + urgência",
+      "Sistema",
+      "Usuário"
+    ],
+    correct: 1,
+    prize: 40000
+  },
+  {
+    level: "🔴 Difícil",
+    q: "Incidente vira problema quando:",
+    a: [
+      "Demora",
+      "Usuário reclama",
+      "É recorrente ou causa desconhecida",
+      "É crítico"
+    ],
+    correct: 2,
+    prize: 60000
+  },
+  {
+    level: "🔴 Difícil",
+    q: "Melhor ação para recorrência:",
+    a: [
+      "Resolver sempre",
+      "Ignorar",
+      "Abrir problema e buscar causa raiz",
+      "Escalar"
+    ],
+    correct: 2,
+    prize: 80000
+  },
+
+  // 🏁 ESPECIALISTA
+  {
+    level: "🏁 Especialista",
+    q: "Falha no Incident Management:",
+    a: [
+      "Dentro do SLA",
+      "Escalonado correto",
+      "Reabertura por falta de validação",
+      "Reclassificação"
+    ],
+    correct: 2,
+    prize: 100000
   }
 ];
 
@@ -152,6 +237,7 @@ function loadQuestion() {
   resetTimer();
 
   const q = questions[current];
+  document.getElementById("level").innerText = q.level;
   document.getElementById("question").innerText = q.q;
   document.getElementById("prize").innerText = q.prize;
 
