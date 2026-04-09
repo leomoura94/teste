@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Show do Service Desk</title>
+<title>Show do Service Desk - Hard Mode</title>
 
 <style>
 body {
@@ -64,7 +64,7 @@ h1 { color: #ffd60a; }
 <body>
 
 <div class="container">
-  <h1>🎮 Show do Service Desk</h1>
+  <h1>🎮 Show do Service Desk - Hard Mode</h1>
 
   <div id="level"></div>
   <div class="timer">⏱️ Tempo: <span id="time">30</span>s</div>
@@ -79,49 +79,47 @@ h1 { color: #ffd60a; }
 
 <script>
 const questions = [
-  { level:"🟢 Fácil", q:"O que melhor define um incidente?",
-    a:["Qualquer falha em TI","Interrupção ou degradação não planejada de serviço","Evento futuro","Solicitação"],
+
+  { level:"🟢", q:"Um usuário relata lentidão intermitente. Qual a melhor classificação inicial?",
+    a:["Problema","Incidente","Mudança","Evento"],
     correct:1 },
 
-  { level:"🟢 Fácil", q:"Qual é o papel MAIS correto do Service Desk?",
-    a:["Resolver tudo","Registrar e encaminhar","Restaurar serviço sendo ponto único","Monitorar"],
-    correct:2 },
-
-  { level:"🟢 Fácil", q:"Sobre SLA, qual afirmação está correta?",
-    a:["Só tempo de resposta","Tempo baseado em impacto e urgência","Igual para todos","Só críticos"],
+  { level:"🟢", q:"Qual ação agrega mais valor no primeiro atendimento N1?",
+    a:["Escalar rapidamente","Restaurar serviço parcialmente e coletar dados","Aguardar usuário","Encerrar ticket"],
     correct:1 },
 
-  { level:"🟢 Fácil", q:"Antes de escalar, o N1 deve:",
-    a:["Escalar direto","Testar aleatório","Seguir KB + coletar evidências","Ignorar"],
+  { level:"🟡", q:"Um ticket foi escalado sem evidência. Qual o maior impacto?",
+    a:["Atraso na resolução","Aumento de SLA","Erro técnico","Falha de sistema"],
+    correct:0 },
+
+  { level:"🟡", q:"Qual cenário indica falha de triagem?",
+    a:["Reclassificação posterior","Escalonamento correto","Categoria errada causando fila incorreta","Uso de workaround"],
     correct:2 },
 
-  { level:"🟡 Médio", q:"O que representa melhor um problema?",
-    a:["Erro isolado","Servidor fora","Incidentes recorrentes sem causa","Solicitação"],
-    correct:2 },
-
-  { level:"🟡 Médio", q:"Workaround é:",
-    a:["Solução definitiva","Correção permanente","Solução temporária sem causa raiz","Mudança"],
-    correct:2 },
-
-  { level:"🟡 Médio", q:"Ticket bem preparado contém:",
-    a:["Texto longo","Print apenas","Contexto + evidência + testes","Prioridade alta"],
-    correct:2 },
-
-  { level:"🔴 Difícil", q:"Prioridade é definida por:",
-    a:["Tempo","Impacto + urgência","Sistema","Usuário"],
+  { level:"🟡", q:"Qual prática reduz retrabalho entre N1 e N2?",
+    a:["Escalar rápido","Padronizar coleta de dados","Aumentar SLA","Reduzir comunicação"],
     correct:1 },
 
-  { level:"🔴 Difícil", q:"Incidente vira problema quando:",
-    a:["Demora","Usuário reclama","É recorrente ou causa desconhecida","É crítico"],
-    correct:2 },
+  { level:"🔴", q:"Um incidente foi resolvido, mas retorna frequentemente. Qual falha ocorreu?",
+    a:["Incident Management","Problem Management","Change Management","Request Fulfillment"],
+    correct:1 },
 
-  { level:"🔴 Difícil", q:"Melhor ação para recorrência:",
-    a:["Resolver sempre","Ignorar","Abrir problema e buscar causa raiz","Escalar"],
-    correct:2 },
+  { level:"🔴", q:"Qual decisão do N2 demonstra maturidade operacional?",
+    a:["Resolver e fechar","Documentar workaround e abrir problema","Escalar fornecedor direto","Aumentar prioridade"],
+    correct:1 },
 
-  { level:"🏁 Especialista", q:"Falha no Incident Management:",
-    a:["Dentro do SLA","Escalonado correto","Reabertura por falta de validação","Reclassificação"],
+  { level:"🔴", q:"Qual é o risco de priorizar apenas SLA e não impacto?",
+    a:["Baixo desempenho","Resolver problema errado primeiro","Mais tickets","Erro humano"],
+    correct:1 },
+
+  { level:"🏁", q:"Um incidente crítico foi resolvido sem registro detalhado. Qual consequência?",
+    a:["Nenhuma","Perda de conhecimento organizacional","Melhora SLA","Redução de backlog"],
+    correct:1 },
+
+  { level:"🏁", q:"Qual indicador melhor mostra maturidade do Service Desk?",
+    a:["Volume de tickets","Tempo médio","Taxa de reabertura e base de conhecimento","Quantidade de analistas"],
     correct:2 }
+
 ];
 
 let current = 0;
